@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../resources/echarts.min.js"></script>
+<script src="../resources/jquery.min.js"></script>
+
+<body>
+<!--广告统计折线图-->
+<div id="advertEcharts" style="width:96%;height:500px;margin:1% 2%;"></div>
+</body>
+<script type="text/javascript">
+    //获取给折线图准备的容器id
+    var dom = document.getElementById("advertEcharts");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    app.title = '广告统计';
+    var colors = ['#5793f3', '#d14a61', '#675bba'];
+    myChart.showLoading();  // 开启 loading 效果
+
+    // if (option && typeof option === "object") {
+
+    // }
+    // 异步加载数据
+    $.get('date.json').done(function (data) {
+        // alert("哈哈");
+        myChart.hideLoading();
+        // var data_str = JSON.stringify(data.date);
+        // console.log(data.date);
+        // // alert(data_str);
+        // // 填入数据
+        // var final_data = [];
+        //
+        // for (var i= 0 ; i < data.date.length; i++ ){
+        //     final_data[i] = data.date[i];
+        // }
+
+        option = {
+            color: colors,
+            tooltip: {
+                show: true,
+                //开启tips框框
+                trigger: 'axis'
+                //刻度跟随鼠标显示
+                //axisPointer: {type: 'cross'}
+            },
+            dataset: {
+                // 如果不指定 dimensions，也可以通过指定 series.encode 完成映射，参见后文。
+                // dimensions: ['product', '2015', '2016', '2017'],
+                source: data.date,
+            },
+            legend: {
+                //设置图例
+                // data: ['播放次数', '广告主数', '预估收益'],
+                //设置右对齐
+                left: 'right'
+            },
+            //设置折线图大小
+            grid: {
+                top: 70,
+                left: 60,
+                right: 30,
+                bottom: 50
+            },
+            //设置x轴
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        onZero: false,
+                        lineStyle: {
+                            color: '#ddd',
+                            width: '90%'
+                        }
+                    },
+                    axisPointer: {
+                        label: {
+                            //相当于tips的标题
+                            formatter: function () {
+                                return '12日广告统计';
+                            }
+                        }
+                    },
+                    axisLabel: {
+                        interval: 0
+                    },
+                    // data: ,//从控制台页面的js获取的参数
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    //刻度对出去的线的颜色
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ddd'
+                        }
+                    },
+                    axisLabel: {
+                        color: "#ddd" //Y轴刻度字颜色
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            // 设置y轴轴线颜色
+                            color: '#fff'
+                        }
+                    }
+                }
+            ],
+            //上面的图例有几个,这里就要有几个，name也要一致
+            series: [
+                {
+                    seriesLayoutBy: 'row',
+                    type: 'line',
+                    smooth: true,
+                },
+                {
+                    seriesLayoutBy: 'row',
+
+                    type: 'line',
+                    smooth: true,
+                },
+                {
+                    seriesLayoutBy: 'row',
+
+                    type: 'line',
+                    smooth: true,
+                }
+            ]
+        };
+        myChart.setOption(option, true);
+    });
+
+
+</script>
+
+</html>

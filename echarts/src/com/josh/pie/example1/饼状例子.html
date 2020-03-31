@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="../../resources/echarts.min.js"></script>
+<script type="text/javascript" src="../../resources/jquery.min.js"></script>
+<body>
+<!--广告统计折线图-->
+<div id="advertEcharts" style="width:96%;height:500px;margin:1% 2%;"></div>
+</body>
+<script type="text/javascript">
+    //获取给折线图准备的容器id
+    var dom = document.getElementById("advertEcharts");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    app.title = '广告统计';
+    var colors = ['#5793f3', '#d14a61', '#675bba'];
+    $.get('pie.json').done(function (data) {
+
+        var content = data.data;
+
+        // console.log(content)
+        var rss = [];
+        for(var i=0; i < content.length ;i++) {
+            rss.push(content[i].name);
+        }
+        // console.log(rss)
+        //
+        // var rs = [];
+        // for(var i=0; i < content.length ;i++) {
+        //     rs.push({
+        //         value:content[i].value,
+        //         name :content[i].name,
+        //     });
+        // }
+        // console.log(rs)
+
+        option = {
+            title: {
+                text: '饼图程序调用高亮示例',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: rss,
+            },
+
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: content,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        app.currentIndex = -1;
+
+        setInterval(function () {
+            var dataLen = option.series[0].data.length;
+            // 取消之前高亮的图形
+            myChart.dispatchAction({
+                type: 'downplay',
+                seriesIndex: 0,
+                dataIndex: app.currentIndex
+            });
+            app.currentIndex = (app.currentIndex + 1) % dataLen;
+            // 高亮当前图形
+            myChart.dispatchAction({
+                type: 'highlight',
+                seriesIndex: 0,
+                dataIndex: app.currentIndex
+            });
+            // 显示 tooltip
+            myChart.dispatchAction({
+                type: 'showTip',
+                seriesIndex: 0,
+                dataIndex: app.currentIndex
+            });
+        }, 2000);
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+
+    });
+
+
+
+</script>
+
+</html>
