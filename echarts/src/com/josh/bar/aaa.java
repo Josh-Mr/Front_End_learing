@@ -1,4 +1,6 @@
-package com.josh.bar;/**
+package com.josh.bar;
+
+/**
 *
 * @description:
 *
@@ -6,10 +8,9 @@ package com.josh.bar;/**
 *
 * @create: 2022-09-15 18:01
 **/
-public class Demo {
+public class aaa {
 
     public static void main(String[] args) {
 
-        // Demo
     }
 }
